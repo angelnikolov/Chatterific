@@ -1,3 +1,17 @@
-<h1>
-  {{title}}
-</h1>
+<ul>
+  <li *ngFor="let message of messages | async">
+    <img [src]="message.user.photoURL" /> {{ message.text }}
+  </li>
+</ul>
+<form (ngSubmit)="sendMessage($event)">
+  <input type="text" [(ngModel)]="message" name="message" />
+  <button type="submit">Send</button>
+</form>
+<button (click)="login()">Login</button>
+<button (click)="logout()">Logout</button>
+<span *ngIf="(sentiment|async)">
+ Last sentiment score:
+{{(sentiment|async)?.score<0 ? 'Bad' : 'Good'}}
+ Magnitude
+{{(sentiment|async)?.magnitude>5 ? 'Powerful' : 'Weak'}}
+</span>

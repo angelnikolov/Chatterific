@@ -1,0 +1,12 @@
+{
+  "rules": {
+    "messages": {
+      ".read": true,
+      ".write": true
+    },
+    "sentiments": {
+      ".read": true,
+      ".write": true
+    }
+  }
+}
