@@ -1,4 +1,4 @@
-<ul>
+<!--<ul>
   <li *ngFor="let message of messages | async">
     <img [src]="message.user.photoURL" /> {{ message.text }}
   </li>
@@ -14,4 +14,52 @@
 {{(sentiment|async)?.score<0 ? 'Bad' : 'Good'}}
  Magnitude
 {{(sentiment|async)?.magnitude>5 ? 'Powerful' : 'Weak'}}
-</span>
+</span>-->
+
+
+<button (click)="login()">Login</button>
+<button (click)="logout()">Logout</button>
+<div class="wrapper">
+  <div class="container">
+    <div class="left">
+      <div class="top">
+        <img [src]="user?.photoURL" alt="" />
+        <input type="text" />
+        <a href="javascript:;" class="search"></a>
+      </div>
+      <ul class="people">
+        <li class="person" [class.active]="selectedUser === user" (click)="selectUser(user);" data-chat="person1" *ngFor="let user of users$|async">
+          <img [src]="user.photoURL" alt="" />
+          <span class="name">{{user.displayName}}</span>
+          <span class="time">2:09 PM</span>
+          <span class="preview">New Message</span>
+        </li>
+      </ul>
+    </div>
+    <div class="right">
+      <div class="top"  *ngIf="selectedUser!==null"><span>To: <span class="name">{{selectedUser.displayName}}</span></span>
+      </div>
+      <div class="chat  active-chat" >
+        <div class="no-users-message row col-xs-1" *ngIf="selectedUser===null">
+          Choose someone from the left
+        </div>
+        <div *ngIf="selectedUser!==null">
+          <div class="conversation-start">
+            <span>Today, {{(lastMessage$|async)?.timestamp|date:'hh:mm:a'}}</span>
+          </div>
+          <div class="bubble" [class.you]="message.user.uid === user.uid" [class.me]="message.user.uid !== user.uid" *ngFor="let message of messages|async">
+            {{message.text}}
+          </div>
+        </div>
+      </div>
+      <div class="write">
+        <form (ngSubmit)="sendMessage($event)">
+          <input type="text" type="text" [(ngModel)]="message" name="message" />
+          <a href="javascript:;" class="write-link attach"></a>
+          <a href="javascript:;" class="write-link smiley"></a>
+          <button href="javascript:;" class="write-link send" [disabled]="selectedUser===null"></button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
