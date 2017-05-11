@@ -90,7 +90,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     @include font;
-    background-image: url('http://s17.postimg.org/fr01hfe33/image.jpg');
+    background-image: url('assets/background.png');
     background-size: cover;
     background-repeat: none;
 }
@@ -240,6 +240,12 @@ body {
                     color: $dark;
                     @include font-bold;
                 }
+                .mood {
+                    color: $dark;
+                    @include font-bold;
+                    right: 15px;
+                    position: absolute;
+                }
             }
         }
         .chat {
@@ -302,6 +308,7 @@ body {
                         background-image: url('http://s1.postimg.org/s5gfy283f/attachemnt.png');
                         background-repeat: no-repeat;
                         background-position: center;
+                        border: 0;
                     }
                 }
                 &.smiley {
@@ -379,6 +386,7 @@ body {
         .conversation-start {
             position: relative;
             width: 100%;
+            margin-top: 10px;
             margin-bottom: 27px;
             text-align: center;
             span {
@@ -444,7 +452,7 @@ body {
         opacity: 1;
     }
 }/* You can add global styles to this file, and also import other style files */
-
+.say-hi-message,
 .no-users-message{
     display: flex;
     height: 100%;
@@ -453,11 +461,132 @@ body {
     color: #a9a9a9;
     font-size: 20px;
 }
-
-                img {
-                    float: left;
-                    width: 40px;
-                    height: 40px;
-                    margin-right: 12px;
-                    border-radius: 50%;
-                }
+.say-hi-message{
+    margin-top: 125px;
+}
+.message__mood{
+    font-size: 10px;
+    font-style: italic;
+    position: absolute;
+    font-weight: bold;
+    top: 15.5px;
+    right: -23.5px;
+    color: #a9a9a9;
+}
+.bubble.me{
+    .message__mood{
+        right: auto;    
+        left: -25.5px;
+    }
+}
+.message-image{
+    border-radius: 0;
+    width: auto;
+    height: auto;
+    margin: 0;
+    float: none;
+    max-width: 150px;
+}
+img {
+    float: left;
+    width: 40px;
+    height: 40px;
+    margin-right: 12px;
+    border-radius: 50%;
+}
+.logout,
+.login{
+    cursor: pointer;
+    border-radius: 100%;
+    background: none;
+    border: 0;
+    width: 40px;
+    height: 40px;
+    float: left;
+    background: $blue url('assets/locked.svg');
+    background-size: 20px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    margin-right: 10px;
+}
+.logout{
+    position: absolute;
+    bottom: 10px;
+    left: 5px;
+    background: $blue url('assets/logout.svg');
+    background-size: 20px;
+    background-position: 12px center;
+    background-repeat: no-repeat;
+    margin-left: 10px;
+}
+.upload
+{
+    &__input{
+        opacity: 0;
+    }
+}.loader,
+.loader:before,
+.loader:after {
+  border-radius: 50%;
+}
+.loader {
+  color: #ffffff;
+  font-size: 11px;
+  text-indent: -99999em;
+  position: relative;
+  width: 10em;
+  height: 10em;
+  box-shadow: inset 0 0 0 1em;
+  -webkit-transform: translateZ(0) scale(0.75);
+  -ms-transform: translateZ(0) scale(0.75);
+  transform: translateZ(0) scale(0.75);
+}
+.loader:before,
+.loader:after {
+  position: absolute;
+  content: '';
+}
+.loader:before {
+  width: 5.2em;
+  height: 10.2em;
+  background: $blue;
+  border-radius: 10.2em 0 0 10.2em;
+  top: -0.1em;
+  left: -0.1em;
+  -webkit-transform-origin: 5.2em 5.1em;
+  transform-origin: 5.2em 5.1em;
+  -webkit-animation: load2 2s infinite ease 1.5s;
+  animation: load2 2s infinite ease 1.5s;
+}
+.loader:after {
+  width: 5.2em;
+  height: 10.2em;
+  background: $blue;
+  border-radius: 0 10.2em 10.2em 0;
+  top: -0.1em;
+  left: 5.1em;
+  -webkit-transform-origin: 0px 5.1em;
+  transform-origin: 0px 5.1em;
+  -webkit-animation: load2 2s infinite ease;
+  animation: load2 2s infinite ease;
+}
+@-webkit-keyframes load2 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes load2 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}

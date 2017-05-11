@@ -17,17 +17,19 @@
 </span>-->
 
 
-<button (click)="login()">Login</button>
-<button (click)="logout()">Logout</button>
 <div class="wrapper">
   <div class="container">
     <div class="left">
       <div class="top">
-        <img [src]="user?.photoURL" alt="" />
+        <button class="login" *ngIf="user === null" (click)="login()"></button>
+        <img *ngIf="user?.photoURL" [src]="user?.photoURL" alt="" />
         <input type="text" />
         <a href="javascript:;" class="search"></a>
       </div>
+      <div class="login-first" *ngIf="user === null" style="display: flex; margin-top: 20px; justify-content: center; align-items: center;">
+        Please, login to see your friends </div>
       <ul class="people">
+
         <li class="person" [class.active]="selectedUser === user" (click)="selectUser(user);" data-chat="person1" *ngFor="let user of users$|async">
           <img [src]="user.photoURL" alt="" />
           <span class="name">{{user.displayName}}</span>
@@ -35,29 +37,42 @@
           <span class="preview">New Message</span>
         </li>
       </ul>
+      <button class="logout" *ngIf="user !== null" (click)="logout()"></button>
     </div>
     <div class="right">
-      <div class="top"  *ngIf="selectedUser!==null"><span>To: <span class="name">{{selectedUser.displayName}}</span></span>
+      <div class="top" *ngIf="selectedUser!==null"><span>To: <span class="name">{{selectedUser.displayName}}</span> <span *ngIf="(totalSentiment$|async)!==undefined && (messages|async)?.length>4"
+          class="mood">Mood: {{totalSentiment$|async|percent}}</span></span>
       </div>
-      <div class="chat  active-chat" >
+      <div class="chat  active-chat">
         <div class="no-users-message row col-xs-1" *ngIf="selectedUser===null">
           Choose someone from the left
         </div>
         <div *ngIf="selectedUser!==null">
           <div class="conversation-start">
-            <span>Today, {{(lastMessage$|async)?.timestamp|date:'hh:mm:a'}}</span>
+            <span *ngIf="(lastMessage$|async)">Today, {{(lastMessage$|async)?.timestamp|date:'hh:mm:a'}}</span>
+          </div>
+          <div class="say-hi-message row col-xs-1" *ngIf="(messages|async)?.length===0">
+            Say Hi!
           </div>
           <div class="bubble" [class.you]="message.user.uid === user.uid" [class.me]="message.user.uid !== user.uid" *ngFor="let message of messages|async">
-            {{message.text}}
+            <div *ngIf="message.text">
+              {{message.text}}
+              <span class="message__mood" *ngIf="message.sentiment"> {{message.sentiment.score|percent}}</span>
+            </div>
+            <div class="loader" *ngIf="message.imageUrl === 'assets/spinner.gif'">Loading...</div>
+            <img class="message-image" *ngIf="message.imageUrl && message.imageUrl !== 'assets/spinner.gif'" [src]="message.imageUrl + (message.moderated ? '&amp;moderated=1' : '')" />
           </div>
         </div>
       </div>
       <div class="write">
         <form (ngSubmit)="sendMessage($event)">
-          <input type="text" type="text" [(ngModel)]="message" name="message" />
-          <a href="javascript:;" class="write-link attach"></a>
+          <input type="text" type="text" [(ngModel)]="message" name="message" [disabled]="selectedUser===null" />
+          <a href="javascript:;" class="write-link attach" (click)="onImageClick($event)"></a>
           <a href="javascript:;" class="write-link smiley"></a>
           <button href="javascript:;" class="write-link send" [disabled]="selectedUser===null"></button>
+        </form>
+        <form id="image-form" action="#">
+          <input id="mediaCapture" class="upload__input" type="file" accept="image/*,capture=camera" (change)="saveImageMessage($event)">
         </form>
       </div>
     </div>
