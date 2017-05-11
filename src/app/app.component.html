@@ -43,24 +43,25 @@
       <div class="top" *ngIf="selectedUser!==null"><span>To: <span class="name">{{selectedUser.displayName}}</span> <span *ngIf="(totalSentiment$|async)!==undefined && (messages|async)?.length>4"
           class="mood">Mood: {{totalSentiment$|async|percent}}</span></span>
       </div>
-      <div class="chat  active-chat">
+      <div class="chat active-chat">
         <div class="no-users-message row col-xs-1" *ngIf="selectedUser===null">
           Choose someone from the left
         </div>
-        <div *ngIf="selectedUser!==null">
+        <div class="scroller" *ngIf="selectedUser!==null">
           <div class="conversation-start">
             <span *ngIf="(lastMessage$|async)">Today, {{(lastMessage$|async)?.timestamp|date:'hh:mm:a'}}</span>
           </div>
           <div class="say-hi-message row col-xs-1" *ngIf="(messages|async)?.length===0">
             Say Hi!
           </div>
-          <div class="bubble" [class.you]="message.user.uid === user.uid" [class.me]="message.user.uid !== user.uid" *ngFor="let message of messages|async">
+          <div class="bubble" message (onMessageAdded)="newMessageAdded($event)" [class.you]="message.user.uid === user.uid" [class.me]="message.user.uid !== user.uid" *ngFor="let message of (messages|async); trackBy: trackByFn">
             <div *ngIf="message.text">
               {{message.text}}
               <span class="message__mood" *ngIf="message.sentiment"> {{message.sentiment.score|percent}}</span>
             </div>
             <div class="loader" *ngIf="message.imageUrl === 'assets/spinner.gif'">Loading...</div>
-            <img class="message-image" *ngIf="message.imageUrl && message.imageUrl !== 'assets/spinner.gif'" [src]="message.imageUrl + (message.moderated ? '&amp;moderated=1' : '')" />
+            <img class="message-image" *ngIf="message.imageUrl && message.imageUrl !== 'assets/spinner.gif'" [src]="message.imageUrl + (message.moderated ? '&amp;moderated=1' : '')"
+            />
           </div>
         </div>
       </div>

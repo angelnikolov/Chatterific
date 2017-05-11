@@ -1,3 +1,4 @@
+import { MessageDirective } from './shared/directives/message.directive';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -21,7 +22,8 @@ const firebaseAuthConfig = {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MessageDirective
   ],
   imports: [
     BrowserModule,

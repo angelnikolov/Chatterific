@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import { User } from './shared/models/user.model';
 import { FirebaseListObservable } from 'angularfire2/database';
 import { FirebaseApp, AngularFire, FirebaseAuthState, FirebaseObjectObservable } from 'angularfire2';
-import { Inject, Component } from '@angular/core';
+import { Directive, Inject, Component, ElementRef } from '@angular/core';
 import { UserInfo } from "firebase";
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
@@ -28,6 +28,9 @@ export class AppComponent {
   fbApp: any;
   public message: string;
   public user: UserInfo = null;
+  newMessageAdded(){
+    this.elementRef.nativeElement.querySelector('.chat').scrollTop = this.elementRef.nativeElement.querySelector('.scroller').offsetHeight;
+  }
   selectUser(selectedUser: UserInfo) {
 
     this.selectedUser = selectedUser;
@@ -72,7 +75,7 @@ export class AppComponent {
         return totalSentiment;
       })
   }
-  constructor(public af: AngularFire, @Inject(FirebaseApp) fbApp: any) {
+  constructor(private elementRef: ElementRef, public af: AngularFire, @Inject(FirebaseApp) fbApp: any) {
     this.fbApp = fbApp;
     this.sentiment = <FirebaseListObservable<any[]>>this.af.database.list('/sentiments')
       .do(objects => { console.log(objects) })
@@ -87,6 +90,9 @@ export class AppComponent {
   login() {
     this.af.auth.login()
   }
+  trackByFn(index, item){
+    return index;
+  }
 
   logout() {
     this.af.auth.logout().then(() => {
@@ -100,6 +106,9 @@ export class AppComponent {
   onImageClick(event: any) {
     event.preventDefault();
     document.getElementById('mediaCapture').click();
+  }
+  ngAfterViewChecked(){
+    console.log('after view checked executed!');
   }
   // TODO: Refactor into image message form component
   saveImageMessage(event: any) {
